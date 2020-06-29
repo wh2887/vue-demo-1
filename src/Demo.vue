@@ -4,11 +4,14 @@
         <button @click="add">+1</button>
         Demo
         <hr>
+        {{message}}
+        找出数组中的偶数：{{fn}}
     </div>
 </template>
 
 <script>
   export default {
+    props: ['message','fn'],
     data(){
       return {
         n:0,
