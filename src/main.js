@@ -4,61 +4,57 @@ const Vue = window.Vue
 // import Demo from './Demo.vue'
 // Vue.component('Demo2', {})
 
-let id = 0
-const createUser = (name, gender) => {
-  id += 1
-  return {id: id, name: name, gender: gender}
-}
-
 new Vue({
   template: `
       <div>
-          <div>
-              <button @click="showAll">全部</button>
-              <button @click="showMale">男</button>
-              <button @click="showFemale">女</button>
-          </div>
-          <ul>
-              <li v-for="(u,index) in displayUsers" :key="index">{{u.id}}-{{u.name}}-{{u.gender}}</li>
-          </ul>
+          {{n}}
+          <hr>
+          <button @click="add1">+1</button>
+          <button @click="add2">+2</button>
+          <button @click="minus1">-1</button>
+          <button @click="minus2">-2</button>
+          <hr>
+          <button @click="undo">撤销</button>
+          <hr>
+          {{history}}
       </div>
   `,
   data: {
-    users: [
-      createUser('方方', '男'),
-      createUser('圆圆', '女'),
-      createUser('灰灰', '男'),
-      createUser('甜甜', '女'),
-    ],
-    gender: ''
+    n: 0,
+    history: [],
+    inUndoModel: false
   },
-  computed: {
-    displayUsers() {
-      console.log('我在计算')
-      const {users, gender} = this
-      const hash = {
-        male: '男',
-        female: '女'
-      }
-      if (gender === '') {
-        return users
-      } else if (gender === 'male' || gender === 'female') {
-        return users.filter(u => u.gender === hash[gender])
+  watch: {
+    n(newValue, oldValue) {
+      if (!this.inUndoModel) {
+        this.history.push({from: oldValue, to: newValue})
       } else {
-        throw new Error('gender的值是意外的值')
+        this.inUndoModel = false
       }
     }
   },
 
   methods: {
-    showMale() {
-      this.gender = 'male'
+    add1() {
+      return this.n += 1
     },
-    showFemale() {
-      this.gender = 'female'
+    add2() {
+      return this.n += 2
     },
-    showAll() {
-      this.gender = ''
+    minus1() {
+      return this.n -= 1
+    },
+    minus2() {
+      return this.n -= 2
+    },
+    undo() {
+      const last = this.history.pop()
+      console.log(last)
+      const old = last.from
+      console.log(old)
+      this.inUndoModel = true
+      this.n = old
+      this.$nextTick(() => {this.inUndoModel = false}, 0)
     }
   }
 }).$mount('#app')
