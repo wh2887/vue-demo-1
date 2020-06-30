@@ -1,20 +1,29 @@
 <template>
     <div class="red">
-        {{n}}
+        {{this.obj.n}}
         <button @click="add">+1</button>
         Demo
         <hr>
         {{message}}
         找出数组中的偶数：{{fn}}
+        <hr>
+        测试Vue中data的BUG <br>
+        一开始就定义的d的值，显示区域：{{obj.d}} <br>
+        一开始未定义的b的值，显示区域：{{b}}
+        <button @click="setB">set b</button>
     </div>
 </template>
 
 <script>
+  const Vue = window.Vue
   export default {
-    props: ['message','fn'],
-    data(){
+    props: ['message', 'fn'],
+    data() {
       return {
-        n:0,
+        obj: {
+          n: 0,
+          d: 150,
+        }
       }
     },
     created() {
@@ -33,8 +42,12 @@
     },
     methods: {
       add() {
-        this.n += 1
+        this.obj.n += 1
       },
+      setB() {
+        console.log('hi')
+        return Vue.set(this.obj, 'b', 511)
+      }
     }
   }
 </script>
