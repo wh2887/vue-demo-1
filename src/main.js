@@ -4,38 +4,48 @@ const Vue = window.Vue
 // import Demo from './Demo.vue'
 // Vue.component('Demo2', {})
 
+let id = 0
+const createUser = (name, gender) => {
+  id += 1
+  return {id: id, name: name, gender: gender}
+}
+
 new Vue({
   data: {
-    user: {
-      email: '1059511459@qq.com',
-      nickName: 'McCall',
-      phone: '+8613812545462'
-    }
+    users: [
+      createUser('方方', '男'),
+      createUser('圆圆', '女'),
+      createUser('灰灰', '男'),
+      createUser('甜甜', '女'),
+    ],
+    displayUsers: []
   },
   template: `
       <div>
-          {{displayName}}
           <div>
-              另一处也要使用名字 {{displayName}} <br>
-              <button @click="setName">点击按钮使用setter修改昵称</button>
+              <button @click="showAll">全部</button>
+              <button @click="showMale">男</button>
+              <button @click="showFemale">女</button>
           </div>
+          <ul>
+              <li v-for="(u,index) in displayUsers" :key="index">{{u.id}}-{{u.name}}-{{u.gender}}</li>
+          </ul>
       </div>
   `,
-  methods:{
-    setName(){
-      this.displayName = '方方'
+  created() {
+    this.displayUsers = this.users
+  },
+  methods: {
+    showMale() {
+      this.displayUsers = this.users.filter(u => u.gender === '男')
+    },
+    showFemale() {
+      this.displayUsers = this.users.filter(u => u.gender === '女')
+    },
+    showAll(){
+      this.displayUsers = this.users
     }
   }
   ,
-  computed: {
-    displayName: {
-      get(){
-        const user = this.user
-        return user.nickName || user.email || user.phone
-      },
-      set(value){
-        this.user.nickName = value
-      }
-    }
-  }
+  computed: {}
 }).$mount('#app')
