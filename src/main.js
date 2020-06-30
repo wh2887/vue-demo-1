@@ -11,15 +11,6 @@ const createUser = (name, gender) => {
 }
 
 new Vue({
-  data: {
-    users: [
-      createUser('方方', '男'),
-      createUser('圆圆', '女'),
-      createUser('灰灰', '男'),
-      createUser('甜甜', '女'),
-    ],
-    displayUsers: []
-  },
   template: `
       <div>
           <div>
@@ -32,20 +23,42 @@ new Vue({
           </ul>
       </div>
   `,
-  created() {
-    this.displayUsers = this.users
+  data: {
+    users: [
+      createUser('方方', '男'),
+      createUser('圆圆', '女'),
+      createUser('灰灰', '男'),
+      createUser('甜甜', '女'),
+    ],
+    gender: ''
   },
+  computed: {
+    displayUsers() {
+      console.log('我在计算')
+      const {users, gender} = this
+      const hash = {
+        male: '男',
+        female: '女'
+      }
+      if (gender === '') {
+        return users
+      } else if (gender === 'male' || gender === 'female') {
+        return users.filter(u => u.gender === hash[gender])
+      } else {
+        throw new Error('gender的值是意外的值')
+      }
+    }
+  },
+
   methods: {
     showMale() {
-      this.displayUsers = this.users.filter(u => u.gender === '男')
+      this.gender = 'male'
     },
     showFemale() {
-      this.displayUsers = this.users.filter(u => u.gender === '女')
+      this.gender = 'female'
     },
-    showAll(){
-      this.displayUsers = this.users
+    showAll() {
+      this.gender = ''
     }
   }
-  ,
-  computed: {}
 }).$mount('#app')
