@@ -16,14 +16,26 @@ new Vue({
       <div>
           {{displayName}}
           <div>
-              另一处也要使用名字 {{displayName}}
+              另一处也要使用名字 {{displayName}} <br>
+              <button @click="setName">点击按钮使用setter修改昵称</button>
           </div>
       </div>
   `,
+  methods:{
+    setName(){
+      this.displayName = '方方'
+    }
+  }
+  ,
   computed: {
-    displayName() {
-      const user = this.user
-      return user.nickName || user.email || user.phone
+    displayName: {
+      get(){
+        const user = this.user
+        return user.nickName || user.email || user.phone
+      },
+      set(value){
+        this.user.nickName = value
+      }
     }
   }
 }).$mount('#app')
