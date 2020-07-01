@@ -7,54 +7,29 @@ const Vue = window.Vue
 new Vue({
   template: `
       <div>
-          {{n}}
-          <hr>
-          <button @click="add1">+1</button>
-          <button @click="add2">+2</button>
-          <button @click="minus1">-1</button>
-          <button @click="minus2">-2</button>
-          <hr>
-          <button @click="undo">撤销</button>
-          <hr>
-          {{history}}
+          <button @click=" n += 1"> n+1</button>
+          <button @click=" obj.a += 'hi'"> obj.a+hi</button>
+          <button @click="obj = {a:'a',b:'b'}">obj = 新对象</button>
       </div>
   `,
   data: {
     n: 0,
-    history: [],
-    inUndoModel: false
+    obj: {
+      a: 'a',
+      b: 'b'
+    }
   },
   watch: {
-    n(newValue, oldValue) {
-      if (!this.inUndoModel) {
-        this.history.push({from: oldValue, to: newValue})
-      } else {
-        this.inUndoModel = false
-      }
+    n() {
+      console.log('n变了')
+    },
+    obj: {
+      handler() {
+        console.log('obj变了')
+      },
+      deep: true
     }
-  },
 
-  methods: {
-    add1() {
-      return this.n += 1
-    },
-    add2() {
-      return this.n += 2
-    },
-    minus1() {
-      return this.n -= 1
-    },
-    minus2() {
-      return this.n -= 2
-    },
-    undo() {
-      const last = this.history.pop()
-      console.log(last)
-      const old = last.from
-      console.log(old)
-      this.inUndoModel = true
-      this.n = old
-      this.$nextTick(() => {this.inUndoModel = false}, 0)
-    }
-  }
+  },
+  methods: {}
 }).$mount('#app')
