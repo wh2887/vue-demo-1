@@ -5,10 +5,10 @@
 </template>
 
 <script>
-  import log from './mixins/log.js'
+  import MyVue from './mixins/MyVue.js'
 
   export default {
-    mixins: [log],
+    extends: MyVue,
     data() {
       return {
         name: 'Child1'

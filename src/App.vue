@@ -2,7 +2,7 @@
     <div id="app">
         App.vue中引入五个组件
         <Child1 v-if="child1Visible"/>
-        <button @click="child1Visible = false">x</button>
+        <button @click="child1Visible = !child1Visible">x</button>
         <br>
         <Child2 v-if="child2Visible"/>
         <button @click="child2Visible = false">x</button>
